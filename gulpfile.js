@@ -1,9 +1,8 @@
 'use strict';
-// Generated on 2020-01-09 using generator-leaflet 0.0.17
 
 const { series, src, dest, watch } = require('gulp');
 const open = require('open');
-
+const browserSync = require('browser-sync');
 // Load plugins
 const $ = require('gulp-load-plugins')();
 
@@ -14,6 +13,7 @@ function styles() {
         .pipe(dest('app/styles'))
         .pipe($.size());
 };
+exports.styles = styles;
 
 // Scripts
 function scripts() {
@@ -22,27 +22,12 @@ function scripts() {
         .pipe($.jshint.reporter('default'))
         .pipe($.size());
 };
+exports.scripts = scripts;
 
 // HTML
-function html() {
-    const jsFilter = $.filter('**/*.js');
-    const cssFilter = $.filter('**/*.css');
-
-    return src('app/*.html')
-        .pipe($.useref.assets())
-        .pipe(jsFilter)
-        .pipe($.uglify())
-        .pipe(jsFilter.restore())
-        .pipe(cssFilter)
-        .pipe($.csso())
-        .pipe(cssFilter.restore())
-        .pipe($.useref.restore())
-        .pipe($.useref())
-        .pipe(dest('dist'))
-        .pipe($.size());
-};
 
 // Images
+// use gulp-imagemin if necessary
 function images() {
     return src([
     		'app/images/**/*',
@@ -50,53 +35,51 @@ function images() {
         .pipe(dest('dist/images'))
         .pipe($.size());
 };
+exports.images = images;
 
 // Clean
 function clean() {
     return src(['dist/styles', 'dist/scripts', 'dist/images'], { read: false }).pipe($.clean());
 };
+exports.clean = clean;
 
-// Connect
-function connect(){
-    $.connect.server({
-        root: 'app',
+// Server
+function reload(done){
+    browserSync.reload();
+    done();
+}
+function serve(done){
+    browserSync.init({
+        server: {
+            baseDir: "app",
+            index: "index.html"
+        },
         port: 9000,
-        livereload: true
-    });
-};
+        open: false
+    })
+    done();
+}
 
-// Open
-function serve() {
-  open("http://localhost:9000");
-};
 
-function watchTask() {
-    // Watch for changes in `app` folder
-    watch([
-        'app/*.html',
-        'app/styles/**/*.css',
-        'app/scripts/**/*.js',
-        'app/images/**/*'
-    ], function (event) {
-        return src(event.path)
-            .pipe($.connect.reload());
-    });
-
+function watchTask(done) {
+    // Watch .html files
+    watch('app/*.html', reload);
     // Watch .css files
-    watch('app/styles/**/*.css', styles);
-
+    watch('app/styles/**/*.css', series(styles, reload));
     // Watch .js files
-    watch('app/scripts/**/*.js', scripts);
-
+    watch('app/scripts/**/*.js', series(scripts, reload));
     // Watch image files
-    watch('app/images/**/*', images);
+    watch('app/images/**/*', series(images, reload));
+    done();
 };
 
 // Build
-exports.build = series(html, images);
+//exports.build = series(html, images);
 
 // Default task
-exports.default = series(html, images, clean);
+//exports.default = series(html, images, clean);
 
 // Watch
-exports.watch = series(connect, serve, watchTask);
+exports.watch = series(watchTask, serve);
+
+

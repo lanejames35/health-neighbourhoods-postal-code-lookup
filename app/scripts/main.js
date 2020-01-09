@@ -7,19 +7,15 @@
 	L.Icon.Default.imagePath = 'images/';
 
 	/* create leaflet map */
-	var map = L.map('map', {
-		center: [52.5377, 13.3958],
-		zoom: 4
-	});
+	var map = L.map('map').setView([43.898206, -78.940707], 9);
 
-	/* add default stamen tile layer */
-	new L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    /* add default OSM tile layer */
+	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		minZoom: 0,
 		maxZoom: 18,
 		attribution: 'Map data © <a href="http://www.openstreetmap.org">OpenStreetMap contributors</a>'
-	}).addTo(map);
+    }).addTo(map);
 
-
-	L.marker([52.5, 13.4]).addTo(map);
+    L.geoJSON(fsa).addTo(map);
 
 }(window, document, L));
