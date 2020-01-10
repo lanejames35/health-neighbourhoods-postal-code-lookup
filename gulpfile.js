@@ -1,57 +1,62 @@
-'use strict';
-
 const { series, src, dest, watch } = require('gulp');
-const open = require('open');
-const browserSync = require('browser-sync');
-// Load plugins
-const $ = require('gulp-load-plugins')();
+const { reload, init } = require('browser-sync');
+const autoprefixer = require('gulp-autoprefixer');
+const babel = require('gulp-babel');
+const size = require('gulp-size');
+const uglify = require('gulp-uglify');
+const csso = require('gulp-csso');
+const clean =require('gulp-clean');
 
 // Styles
 function styles() {
-    return src(['app/styles/main.css'])
-        .pipe($.autoprefixer('last 1 version'))
-        .pipe(dest('app/styles'))
-        .pipe($.size());
-};
+    return src(['app/styles/**.css', 'app/lib/styles/*.css'])
+        .pipe(autoprefixer('last 1 version'))
+        .pipe(csso())
+        .pipe(dest('dist/styles'))
+        .pipe(size());
+}
 exports.styles = styles;
 
 // Scripts
 function scripts() {
-    return src(['app/scripts/**/*.js'])
-        .pipe($.jshint('.jshintrc'))
-        .pipe($.jshint.reporter('default'))
-        .pipe($.size());
-};
+    return src(['app/scripts/**/*.js', 'app/lib/scripts/*.js'])
+        .pipe(babel({ ignore: ["app/lib/scripts/leaflet.js"] }))
+        .pipe(uglify())
+        .pipe(dest('dist/scripts'))
+        .pipe(size());
+}
 exports.scripts = scripts;
 
 // HTML
+function html(){
+    return src('app/index.html')
+            .pipe(dest('dist'));
+}
+exports.html = html;
 
 // Images
 // use gulp-imagemin if necessary
 function images() {
-    return src([
-    		'app/images/**/*',
-    		'app/lib/images/*'])
+    return src(['app/images/**/*', 'app/lib/images/*'])
         .pipe(dest('dist/images'))
-        .pipe($.size());
-};
+        .pipe(size());
+}
 exports.images = images;
 
 // Clean
-function clean() {
-    return src(['dist/styles', 'dist/scripts', 'dist/images'], { read: false }).pipe($.clean());
-};
-exports.clean = clean;
-
+function wipe() {
+    return src(['dist'], { read: false }).pipe(clean());
+}
+exports.wipe = wipe;
 // Server
-function reload(done){
-    browserSync.reload();
+function regen(done){
+    reload();
     done();
 }
 function serve(done){
-    browserSync.init({
+    init({
         server: {
-            baseDir: "app",
+            baseDir: "dist",
             index: "index.html"
         },
         port: 9000,
@@ -63,15 +68,15 @@ function serve(done){
 
 function watchTask(done) {
     // Watch .html files
-    watch('app/*.html', reload);
+    watch('app/*.html', series(html, regen));
     // Watch .css files
-    watch('app/styles/**/*.css', series(styles, reload));
+    watch('app/styles/**/*.css', series(styles, regen));
     // Watch .js files
-    watch('app/scripts/**/*.js', series(scripts, reload));
+    watch('app/scripts/**/*.js', series(scripts, regen));
     // Watch image files
-    watch('app/images/**/*', series(images, reload));
+    watch('app/images/**/*', series(images, regen));
     done();
-};
+}
 
 // Build
 //exports.build = series(html, images);
@@ -80,6 +85,4 @@ function watchTask(done) {
 //exports.default = series(html, images, clean);
 
 // Watch
-exports.watch = series(watchTask, serve);
-
-
+exports.default = series(styles, scripts, html, watchTask, serve);

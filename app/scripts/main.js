@@ -1,5 +1,3 @@
-/*jslint browser: true*/
-/*global L */
 L.Icon.Default.imagePath = 'images/';
 // Neighbourhood geometries from open data
 /* create leaflet map */

@@ -2,9 +2,13 @@
   "name": "health-neighbourhoods-postal-code-lookup",
   "version": "1.0.0",
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
     "browser-sync": "^2.26.7",
+    "eslint": "^6.8.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "0.0.7",
+    "gulp-babel": "^8.0.0-beta.2",
     "gulp-clean": "^0.2.4",
     "gulp-csso": "^0.2.8",
     "gulp-filter": "^6.0.0",
@@ -26,5 +30,8 @@
     "build": "gulp"
   },
   "author": "James Lane",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "url": "https://github.com/lanejames35/health-neighbourhoods-postal-lookup.git"
+  }
 }
