@@ -35,6 +35,7 @@ function highlightFeature(e) {
 	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
 		layer.bringToFront();
 	}
+	console.log("the mouse is in");
 	info.update(layer.feature.properties);
 }
 
@@ -43,6 +44,7 @@ var hnLayer, fsaLayer;
 function resetHighlight(e) {
 	hnLayer.resetStyle(e.target);
 	info.update();
+	console.log("the mouse is out");
 }
 // Zoom in on the neighbourhood when clicked
 function zoomToFeature(e) {
@@ -55,20 +57,34 @@ function onEachFeature(feature, layer){
 		click: zoomToFeature
 	});
 }
-// Create the neighbourhood geoJSON layer
-hnLayer = L.geoJSON(hn, { onEachFeature: onEachFeature }).addTo(map);
-
 // Create the FSA layer
 fsaLayer = L.geoJSON(fsa, {
 	style: function() {
 		const colours = ['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e','#e6ab02'];
 		const idx = Math.floor(Math.random() * 6);
-		return { color: colours[idx], fill: false };
+		return { color: colours[idx], fill: true };
 	},
 	onEachFeature: function(feature, layer){
-		layer.bindTooltip(layer.feature.properties.FSA, { sticky: true });
+		layer.bindTooltip(layer.feature.properties.FSA, { sticky: true, interactive: true });
+		layer.on({
+			mouseover: function(e){
+				e.target.openTooltip();
+				console.log("Mouseover");
+			},
+			mouseout: function(e){
+				e.target.closeTooltip();
+				console.log("Mouse is out");
+			},
+			click: function(e){
+				e.target.toggleTooltip();
+				e.target.bringToFront();
+			}
+		})
 	}
 }).addTo(map);
+// Create the neighbourhood geoJSON layer
+hnLayer = L.geoJSON(hn, { onEachFeature: onEachFeature }).addTo(map);
+
 /*
  * Layer toggle control
  */
