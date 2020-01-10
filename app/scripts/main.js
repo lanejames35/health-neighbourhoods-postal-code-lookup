@@ -23,6 +23,7 @@ info.update = function(props) {
 // add the information controller
 info.addTo(map);
 
+
 // Highlight the area when hovered
 function highlightFeature(e) {
 	var layer = e.target;
@@ -38,7 +39,7 @@ function highlightFeature(e) {
 	info.update(layer.feature.properties);
 }
 
-var hnLayer;
+var hnLayer, fsaLayer;
 // Reset the highlight when the mouse is moved out
 function resetHighlight(e) {
 	hnLayer.resetStyle(e.target);
@@ -55,5 +56,11 @@ function onEachFeature(feature, layer){
 		click: zoomToFeature
 	});
 }
+// Create the FSA layer
+fsaLayer = L.geoJSON(fsa, {
+	style: function() {
+		return { color: '#f14668', fill: false };
+	}
+}).bindTooltip('Hello').addTo(map);
 // Create the neighbourhood geoJSON layer
-hnLayer = L.geoJSON(hn, { onEachFeature: onEachFeature }).addTo(map);
+//hnLayer = L.geoJSON(hn, { onEachFeature: onEachFeature }).addTo(map);
