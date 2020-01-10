@@ -21,8 +21,7 @@ info.update = function(props) {
 		'<b>' + props.COMMON_NAME + '</b>' : 'Hover over a neighbourhood');
 };
 // add the information controller
-info.addTo(map);
-
+info.setPosition('bottomright').addTo(map);
 
 // Highlight the area when hovered
 function highlightFeature(e) {
@@ -56,11 +55,25 @@ function onEachFeature(feature, layer){
 		click: zoomToFeature
 	});
 }
+// Create the neighbourhood geoJSON layer
+hnLayer = L.geoJSON(hn, { onEachFeature: onEachFeature }).addTo(map);
+
 // Create the FSA layer
 fsaLayer = L.geoJSON(fsa, {
 	style: function() {
-		return { color: '#f14668', fill: false };
+		const colours = ['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e','#e6ab02'];
+		const idx = Math.floor(Math.random() * 6);
+		return { color: colours[idx], fill: false };
+	},
+	onEachFeature: function(feature, layer){
+		layer.bindTooltip(layer.feature.properties.FSA, { sticky: true });
 	}
-}).bindTooltip('Hello').addTo(map);
-// Create the neighbourhood geoJSON layer
-//hnLayer = L.geoJSON(hn, { onEachFeature: onEachFeature }).addTo(map);
+}).addTo(map);
+/*
+ * Layer toggle control
+ */
+const overlays = {
+	"Postal Code": fsaLayer,
+	"Health Neighbourhood": hnLayer
+};
+L.control.layers(false, overlays).addTo(map);
