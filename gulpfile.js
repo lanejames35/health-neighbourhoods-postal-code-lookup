@@ -6,6 +6,7 @@ const size = require('gulp-size');
 const uglify = require('gulp-uglify');
 const csso = require('gulp-csso');
 const clean =require('gulp-clean');
+const imagemin = require('gulp-imagemin');
 
 // Styles
 function styles() {
@@ -38,7 +39,8 @@ exports.html = html;
 // use gulp-imagemin if necessary
 function images() {
     return src(['app/images/**/*', 'app/lib/images/*'])
-        .pipe(dest('dist/images'))
+        .pipe(imagemin())
+        .pipe(dest('dist/styles/images'))
         .pipe(size());
 }
 exports.images = images;
@@ -85,4 +87,4 @@ function watchTask(done) {
 //exports.default = series(html, images, clean);
 
 // Watch
-exports.default = series(styles, scripts, html, watchTask, serve);
+exports.default = series(styles, scripts, images, html, watchTask, serve);

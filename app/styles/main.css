@@ -24,17 +24,15 @@ html {
 
 .map-application {
 	height: 100%;
-	
+
 	padding-top: 50px;
-	
+
 }
-
-
 header {
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 50px;
+	height: 75px;
 	padding: 15px;
 	z-index: 9;
 	border-bottom: 1px solid #eee;
@@ -42,4 +40,13 @@ header {
 }
 header .appName {
 	float: left;
+}
+.info {
+	background: #fff;
+	background-clip: padding-box;
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: 5px;
+	padding: 5px;
+	width: 200px;
+	height: auto;
 }

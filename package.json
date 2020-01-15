@@ -11,14 +11,9 @@
     "gulp-babel": "^8.0.0-beta.2",
     "gulp-clean": "^0.2.4",
     "gulp-csso": "^0.2.8",
-    "gulp-filter": "^6.0.0",
-    "gulp-jshint": "^2.1.0",
-    "gulp-load-plugins": "^2.0.2",
+    "gulp-imagemin": "^6.2.0",
     "gulp-size": "^0.3.0",
-    "gulp-uglify": "^3.0.2",
-    "gulp-useref": "^4.0.0",
-    "gulp-util": "^2.2.14",
-    "jshint": "^2.11.0-rc1"
+    "gulp-uglify": "^3.0.2"
   },
   "dependencies": {
     "leaflet": "^1.6.0"
@@ -27,7 +22,8 @@
   "main": "main.js",
   "scripts": {
     "test": "gulp watch",
-    "build": "gulp"
+    "build": "gulp",
+    "wipe": "gulp wipe"
   },
   "author": "James Lane",
   "license": "ISC",

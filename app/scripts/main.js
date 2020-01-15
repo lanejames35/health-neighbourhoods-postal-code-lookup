@@ -1,7 +1,6 @@
-L.Icon.Default.imagePath = 'images/';
 // Neighbourhood geometries from open data
 /* create leaflet map */
-var map = L.map('map').setView([43.898206, -78.940707], 9);
+const map = L.map('map').setView([43.898206, -78.940707], 9);
 /* add default OSM tile layer */
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	minZoom: 0,
@@ -9,7 +8,7 @@ L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	attribution: 'Map data © <a href="http://www.openstreetmap.org">OpenStreetMap contributors</a> | Postal Code data © Canada Post Corporation'
 }).addTo(map);
 // Create the custom dialog to show the neighbourhood name
-var info = L.control();
+const info = L.control();
 info.onAdd = function() {
 	this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
 	this.update();
@@ -25,40 +24,46 @@ info.setPosition('bottomright').addTo(map);
 
 // Create the FSA layer
 const fsaLayer = L.geoJSON(fsa, {
-	style: function() {
+	style: () => {
 		return { color: '#d95f02', fill: true };
 	},
 	onEachFeature: function(feature, layer){
-		layer.bindTooltip(layer.feature.properties.FSA, { sticky: true, interactive: true });
+		layer.bindTooltip(layer.feature.properties.FSA, { sticky: true });
 		layer.on({
-			mouseover: function(e){
+			mouseover: e => {
+				layer.setStyle({
+					weight: 5,
+					color: '#cf0014'
+				}),
 				e.target.openTooltip();
 			},
-			mouseout: function(e){
+			mouseout: e => {
+				layer.setStyle({
+					weight: 3,
+					color: '#d95f02'
+				}),
 				e.target.closeTooltip();
-			},
-			click: function(e){
-				e.target.bringToFront();
 			}
 		})
 	}
 }).addTo(map);
 // Create the neighbourhood geoJSON layer
 const hnLayer = L.geoJSON(hn, {
-	style: function(){
-		return { color: '#3388ff', fill: false};
+	style: () => {
+		return { color: '#3388ff', fill: false };
 	},
 	onEachFeature: function(feature, layer){
 		layer.on({
-			mouseover: function(e){
+			mouseover: e => {
 				const currentColour = (e.target.options.color == '#1eb300' ? '#1eb300' : '#666');
 				layer.setStyle({
 					weight: 5,
 					color: currentColour,
 				});
+				layer.bringToFront();
 				info.update(layer.feature.properties);
 			},
-			mouseout: function(e){
+			mouseout: e => {
 				const currentColour = (e.target.options.color == '#1eb300' ? '#1eb300' : '#3388ff');
 				layer.setStyle({
 					weight: 3,
@@ -66,7 +71,7 @@ const hnLayer = L.geoJSON(hn, {
 				});
 				info.update();
 			},
-			click: function(e){
+			click: e => {
 				const currentColour = (e.target.options.color == '#1eb300' ? '#666' : '#1eb300');
 				layer.setStyle({
 					color: currentColour
