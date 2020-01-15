@@ -1,5 +1,5 @@
 <!doctype html>
-<htm lang="en-US">
+<html lang="en-US">
 <head>
 	<meta charset="UTF-8">
 	<title>Health Neighbourhoods Postal Code Lookup</title>
@@ -12,18 +12,39 @@
 	<script src="scripts/leaflet.js"></script>
 </head>
 <body>
-
-		<header class="group">
-			<div class="appName">
-				<h1>Health Neighbourhoods Postal Code Lookup!</h1>
-			</div>
-		</header>
-
+	<div class="container"></div>
+	<header class="group">
+		<div class="appName">
+			<h1>Health Neighbourhoods Postal Code Lookup!</h1>
+		</div>
+		<div class="modal-control">
+			<button id="modal-open" type="button">What can I do?</button>
+		</div>
+	</header>
+	<div class="modal">
+		<div class="modal-header">
+			<h2>Map actions explained</h2>
+		</div>
+		<div class="modal-body">
+			<p>There are several things you can do with this map:</p>
+			<ul>
+				<li>Hover the blue lines to identify a Health Neighbourhood (see the information box on the bottom right)</li>
+				<li>Hover within a Health Neighbourhood to identify the postal code(s) within the boundaires</li>
+				<li>Click a Health Neighbourhood to toggle the border colour (useful for isolating it from the others!)</li>
+				<li>Add/Remove a layer from the map using the dialog in the top right</li>
+			</ul>
+		</div>
+		<div class="modal-actions">
+			<button id="modal-close" type="button">Close</button>
+		</div>
+	</div>
 	<div class="map-application">
 		<div id="map" class="map"></div>
 	</div>
 	<script src="scripts/FSA.js"></script>
 	<script src="scripts/hn.js"></script>
 	<script src="scripts/main.js"></script>
+	<script src="scripts/modal.js"></script>
+
 </body>
-</htm lang="en-US">
+</html>
