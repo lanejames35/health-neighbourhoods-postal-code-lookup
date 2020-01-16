@@ -81,10 +81,7 @@ function watchTask(done) {
 }
 
 // Build
-//exports.build = series(html, images);
-
-// Default task
-//exports.default = series(html, images, clean);
+exports.build = series(styles, scripts, images, html);
 
 // Watch
 exports.default = series(styles, scripts, images, html, watchTask, serve);
