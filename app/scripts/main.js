@@ -2,10 +2,10 @@
 /* create leaflet map */
 const map = L.map('map').setView([43.898206, -78.940707], 9);
 /* add default OSM tile layer */
-L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	minZoom: 0,
 	maxZoom: 18,
-	attribution: 'Map data © <a href="http://www.openstreetmap.org">OpenStreetMap contributors</a> | Postal Code data © Canada Post Corporation'
+	attribution: 'Map data © <a href="https://www.openstreetmap.org">OpenStreetMap contributors</a> | Postal Code data © Canada Post Corporation'
 }).addTo(map);
 // Create the custom dialog to show the neighbourhood name
 const info = L.control();
